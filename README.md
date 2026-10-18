@@ -94,7 +94,7 @@ GitHub Actions:
         env:
           THIRTYSEVENAUDITS_API_KEY: ${{ secrets.THIRTYSEVENAUDITS_API_KEY }}
         run: |
-          npx -y 37audits-cli@1.0.1 mw start \
+          npx -y 37audits-cli@1.0.2 mw start \
             --project "${{ secrets.THIRTYSEVENAUDITS_PROJECT_ID }}" \
             --run-auditors --wait --ends-in 30m \
             --reason "Deploy of my-app at ${GITHUB_REF_NAME}@${GITHUB_SHA::7}"
@@ -106,7 +106,7 @@ GitHub Actions:
         continue-on-error: true
         env:
           THIRTYSEVENAUDITS_API_KEY: ${{ secrets.THIRTYSEVENAUDITS_API_KEY }}
-        run: npx -y 37audits-cli@1.0.1 mw end "${{ steps.maintenance.outputs.window_id }}" --project "${{ secrets.THIRTYSEVENAUDITS_PROJECT_ID }}"
+        run: npx -y 37audits-cli@1.0.2 mw end "${{ steps.maintenance.outputs.window_id }}" --project "${{ secrets.THIRTYSEVENAUDITS_PROJECT_ID }}"
 ```
 
 `mw start` writes `window_id` (and `audit run` writes `group_id`) to

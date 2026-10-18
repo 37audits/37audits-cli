@@ -25,6 +25,9 @@ jobs:
       - run: npm run lint
       - run: npm run typecheck
       - run: npm test
+      # Build before publish: npm validates "bin" against the files on disk
+      # before prepack runs and silently drops it when dist/ is missing.
+      - run: npm run build
       - name: Check the tag matches package.json
         run: |
           TAG="${GITHUB_REF_NAME#v}"
@@ -43,6 +46,6 @@ jobs:
             PRERELEASE="${TAG#v[0-9]*.[0-9]*.[0-9]*-}"
             echo "tag=${PRERELEASE%%[-.]*}" >> "$GITHUB_OUTPUT"
           fi
-      # Trusted publishing (OIDC): no npm token. Configure it on npmjs.com
-      # for this repository and workflow after the first manual publish.
+      # Trusted publishing (OIDC): no npm token. The trusted publisher on
+      # npmjs.com must grant the "publish" permission, not only "stage publish".
       - run: npm publish --provenance --access public --tag ${{ steps.npm-tag.outputs.tag }}
