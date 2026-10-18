@@ -10,7 +10,7 @@ export const DEFAULT_AUTH_URL =
  * Public clients have no secret, so this id is not sensitive. Empty until the
  * client is registered; `login` then explains how to set it.
  */
-export const DEFAULT_OAUTH_CLIENT_ID = '';
+export const DEFAULT_OAUTH_CLIENT_ID = '2c7b81f7-5e7e-4927-9321-ba6ec909f11b';
 
 /** Loopback ports registered as redirect URIs, tried in order. */
 export const CALLBACK_PORTS: readonly number[] = [37371, 37372, 37373];
