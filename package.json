@@ -1,6 +1,6 @@
 {
   "name": "37audits-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "37 Audits CLI — run audits, read results and wrap deploys in maintenance windows from CI/CD",
   "license": "MIT",
   "type": "module",
