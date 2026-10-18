@@ -13,6 +13,14 @@ function sigintHandler(): void {
 export function setupCliExitHandler(): void {
   process.on('SIGINT', sigintHandler);
 
+  // `37audits ... | head` closes stdout early; that is not an error.
+  process.stdout.on('error', (err: NodeJS.ErrnoException) => {
+    if (err.code === 'EPIPE') {
+      process.exit(0);
+    }
+    throw err;
+  });
+
   process.on('uncaughtException', (err: unknown) => {
     outputError({
       message: errorMessage(err, 'An unexpected error occurred'),

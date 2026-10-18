@@ -32,7 +32,8 @@ export const whoamiCommand = new Command('whoami')
       globalOpts,
       {
         authenticated: true,
-        authKind: me?.authKind ?? client.authKind,
+        authKind:
+          me?.authKind ?? (client.authKind === 'oauth' ? 'user' : 'api_key'),
         source: client.authSource,
         ...(me?.userId && { userId: me.userId }),
         ...(me?.email && { email: me.email }),

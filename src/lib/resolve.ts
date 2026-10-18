@@ -91,10 +91,20 @@ export async function listMonitoredUrls(
 ): Promise<MonitoredUrl[]> {
   const urls: MonitoredUrl[] = [];
   for (const orgId of await organizationIds(client)) {
-    const projects = await client.request<Project[]>(
-      'GET',
-      `/v2/organizations/${orgId}/projects`,
-    );
+    let projects: Project[];
+    try {
+      projects = await client.request<Project[]>(
+        'GET',
+        `/v2/organizations/${orgId}/projects`,
+      );
+    } catch (err) {
+      // An API key is scoped to one organization, but the organization list
+      // can include others its creator belongs to; those answer 404.
+      if (err instanceof ApiError && err.statusCode === 404) {
+        continue;
+      }
+      throw err;
+    }
     for (const project of projects) {
       urls.push(
         ...(await client.request<MonitoredUrl[]>(
