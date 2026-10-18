@@ -1,0 +1,54 @@
+{
+  "name": "37audits-cli",
+  "version": "1.0.0",
+  "description": "37 Audits CLI — run audits, read results and wrap deploys in maintenance windows from CI/CD",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "37audits": "./dist/cli.cjs"
+  },
+  "files": [
+    "dist/cli.cjs"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/37audits/37audits-cli.git"
+  },
+  "homepage": "https://github.com/37audits/37audits-cli#readme",
+  "bugs": {
+    "url": "https://github.com/37audits/37audits-cli/issues"
+  },
+  "keywords": [
+    "37audits",
+    "cli",
+    "audit",
+    "ci",
+    "maintenance-window"
+  ],
+  "scripts": {
+    "dev": "tsx src/cli.ts",
+    "build": "node scripts/build.mjs",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "vitest run --config vitest.config.e2e.ts",
+    "prepack": "npm run build"
+  },
+  "dependencies": {
+    "@commander-js/extra-typings": "14.0.0",
+    "commander": "14.0.3",
+    "picocolors": "1.1.1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.4.11",
+    "@types/node": "24.12.4",
+    "esbuild": "0.28.1",
+    "tsx": "4.22.4",
+    "typescript": "5.9.3",
+    "vitest": "4.1.9"
+  }
+}
