@@ -67,7 +67,10 @@ function problemMessage(body: unknown, text: string, status: number): string {
     }
   }
   const trimmed = text.trim();
-  return trimmed && trimmed.length <= 300 ? trimmed : `HTTP ${status}`;
+  const isJson = trimmed.startsWith('{') || trimmed.startsWith('[');
+  return trimmed && !isJson && trimmed.length <= 300
+    ? trimmed
+    : `HTTP ${status}`;
 }
 
 export class ApiClient {

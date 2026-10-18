@@ -191,6 +191,7 @@ async function loginWithBrowser(globalOpts: GlobalOpts): Promise<void> {
 
 export const loginCommand = new Command('login')
   .description('Sign in through the browser, or save an API key for CI')
+  .option('--api-key <key>', 'API key to store (tsa_live_... or tsa_test_...)')
   .addHelpText(
     'after',
     buildHelpText({
@@ -216,9 +217,13 @@ Credentials are stored with mode 0600 in ${getCredentialsPath()}.`,
       ],
     }),
   )
-  .action(async (_opts, cmd) => {
+  .action(async (opts, cmd) => {
     const globalOpts = globalOptsOf(cmd);
-    const key = globalOpts.apiKey?.trim();
+    // The option exists on both `login` and the program; take whichever was
+    // given (`login --api-key k` or `--api-key k login`).
+    const key = (
+      opts.apiKey ?? (cmd.parent?.opts() as GlobalOpts | undefined)?.apiKey
+    )?.trim();
 
     if (key) {
       await loginWithApiKey(key, globalOpts);

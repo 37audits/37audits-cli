@@ -1,6 +1,6 @@
 import { Command } from '@commander-js/extra-typings';
 import { emit, fail, globalOptsOf, withSpinnerCall } from '../../lib/actions';
-import { requireClient } from '../../lib/api';
+import { ApiError, requireClient } from '../../lib/api';
 import { parseDuration } from '../../lib/duration';
 import { formatDate, summarizeStatuses } from '../../lib/format';
 import { appendGithubOutput } from '../../lib/github-output';
@@ -138,11 +138,11 @@ deploy needs.`,
             },
           );
         } catch (err) {
-          if ((err as { statusCode?: number }).statusCode === 409) {
-            fail(
-              globalOpts,
-              `Could not start: ${(err as Error).message} (another window is active or overlaps).`,
+          if (err instanceof ApiError && err.statusCode === 409) {
+            throw new ApiError(
+              `Could not start: ${err.message} (another window is active or overlaps).`,
               'window_conflict',
+              409,
             );
           }
           throw err;

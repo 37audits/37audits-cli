@@ -193,6 +193,9 @@ export async function createCallbackServer(
     },
   );
 
+  // login awaits this later; until then a rejection must not be "unhandled".
+  waitForCallback.catch(() => {});
+
   const timeout = setTimeout(() => {
     listening.close();
     rejectCallback(

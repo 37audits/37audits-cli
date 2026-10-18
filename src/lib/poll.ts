@@ -36,7 +36,10 @@ export async function waitForGroup(
       const page = await client.request<Page<AuditorResult>>(
         'GET',
         `/v2/monitored-urls/${options.urlId}/audit-results`,
-        { query: { groupId: options.groupId, size: GROUP_PAGE_SIZE } },
+        {
+          query: { groupId: options.groupId, size: GROUP_PAGE_SIZE },
+          retry: false,
+        },
       );
       results = page.content ?? [];
       pending = results.filter((r) => r.status === 'pending').length;

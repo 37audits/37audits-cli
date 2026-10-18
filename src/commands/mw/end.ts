@@ -1,6 +1,6 @@
 import { Command } from '@commander-js/extra-typings';
 import { emit, fail, globalOptsOf, withSpinnerCall } from '../../lib/actions';
-import { requireClient } from '../../lib/api';
+import { ApiError, requireClient } from '../../lib/api';
 import { buildHelpText } from '../../lib/help-text';
 import { requireProjectTarget, resolveProjectId } from '../../lib/resolve';
 import type { MaintenanceWindow } from '../../lib/types';
@@ -71,11 +71,11 @@ example by its --ends-in cap) answers window_not_active.`,
             `${base}/${id}/end`,
           );
         } catch (err) {
-          if ((err as { statusCode?: number }).statusCode === 409) {
-            fail(
-              globalOpts,
-              `Window ${id} is not active: ${(err as Error).message}`,
+          if (err instanceof ApiError && err.statusCode === 409) {
+            throw new ApiError(
+              `Window ${id} is not active: ${err.message}`,
               'window_not_active',
+              409,
             );
           }
           throw err;
